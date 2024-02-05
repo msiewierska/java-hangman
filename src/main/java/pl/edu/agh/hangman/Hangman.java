@@ -8,9 +8,9 @@ public class Hangman {
 
 //        GetRandomWordFromFile wordGenerator = new GetRandomWordFromUrl("url");
 //        String word = wordGenerator.getWord();
-        //System.out.println("Słowow e celach testowych " + word);
+        //System.out.println("Słowo w celach testowych " + word);
 
-        Game game = new Game(word);
+        Game game = new Game(word, 6);
         game.start();
     }
 }

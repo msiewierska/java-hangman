@@ -6,59 +6,54 @@ import java.util.Scanner;
 public class Game {
     public String word;
     private String mask = "";
-    public boolean gameIsWon = false;
-    private ArrayList<String> wrongAttemps = new ArrayList<>();
-    private ArrayList<String> properAttemps = new ArrayList<>();
-
-    public Game(String word ){
+    private int numberOfAttempts;
+    private ArrayList<String> wrongAttempts = new ArrayList<>();
+    private ArrayList<String> properAttempts = new ArrayList<>();
+    public Game(String word, int numberOfAttemps ){
         this.word = word;
-
+        this.numberOfAttempts = numberOfAttemps;
     }
    public void start() {
        System.out.println("Zagraj w wisielca");
-       printState();
        updateMask();
+       Print.printState(this.wrongAttempts, mask);
 
-       while (wrongAttemps.size() < 6 && !gameIsWon) {
+       while (wrongAttempts.size() < this.numberOfAttempts) {
            performRound();
+
+           if (wrongAttempts.size() == this.numberOfAttempts) {
+               this.onFail();
+           }
 
            if (isGameIsWon()) {
                break;
            }
        }
    }
-
    private void performRound() {
        String letter = askForInput();
 
        if (word.contains(letter)) {
-           properAttemps.add(letter);
+           properAttempts.add(letter);
            System.out.println("Litera znajduje się w słowie");
        } else {
-           wrongAttemps.add(letter);
+           wrongAttempts.add(letter);
            System.out.println("Litery nie ma w słowie");
        }
 
        updateMask();
-       printState();
+       Print.printState(this.wrongAttempts, mask);
 
        if (isGameIsWon()) {
-           printGameWon();
-       }
-
-       if (wrongAttemps.size() == 6) {
-           printGameLost();
+           this.onSuccess();
        }
    }
-
     private boolean isGameIsWon() {
         return !this.mask.contains("_");
     }
-
    private boolean checkIfIsLetter(String letter) {
         return letter.length() == 1;
    }
-
    private String askForInput() {
        Scanner myObj = new Scanner(System.in);
        System.out.println("");
@@ -67,45 +62,26 @@ public class Game {
        String letter = myObj.nextLine();
 
        while(!checkIfIsLetter(letter)) {
-           System.out.println("Litera niepoprawna");
-           System.out.println("Podaj literę");
-
+           System.out.println("Litera jest niepoprawna. Podaj poprawną literę (1znak)");
            letter = myObj.nextLine();
        }
 
        return letter.toUpperCase(Locale.ROOT);
    }
-
     public void updateMask() {
         String newMask = "";
 
         for (int i = 0; i < word.length(); i++) {
             String letter = String.valueOf(word.charAt(i));
-            if (properAttemps.contains(letter)) {
-                newMask = newMask + letter;
-            } else {
-                newMask = newMask + "_ ";
-            }
+            newMask = newMask + (properAttempts.contains(letter) ? letter : "_ ");
         }
 
         this.mask = newMask;
     }
-
-    private void printGameLost(){
-        System.out.println("");
-        System.out.println("Przegrałeś! Słowo to: " + word);
-        System.out.println("Czy chcesz spróbować jeszcze raz?");
+    private void onSuccess() {
+        Print.printGameWon();
     }
-
-    private void printGameWon() {
-        System.out.println("");
-        System.out.println("Wygrałeś");
+    private void onFail() {
+        Print.printGameLost(this.word);
     }
-
-    private void printState(){
-        Print.printGameState(this.wrongAttemps.size());
-        System.out.println("#### Słowo: ");
-        System.out.print(this.mask);
-    }
-
 }
