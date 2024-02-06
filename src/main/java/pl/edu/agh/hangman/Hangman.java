@@ -9,7 +9,7 @@ public class Hangman {
      String word= generator.getWord();
         System.out.println(word);
 
-        Gra game = new Gra("word");
+        Game game = new Game("word",6);
         game.start();
 
     }
