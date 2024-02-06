@@ -2,10 +2,7 @@ package pl.edu.agh.hangman;
 
 import java.util.ArrayList;
 
-public class Gra{
-    public String word;
-
-   private ArrayList<String> attempts = new ArrayList<>();
+public class Print {
     public static final String[] HANGMANPICS = new String[]{
             "  +---+\n" +
                     "  |   |\n" +
@@ -57,18 +54,24 @@ public class Gra{
                     "      |\n" +
                     "========"
     };
-    public Gra(String word ){
-        this.word=word;
-
+    public static void printGameState(int state) {
+        System.out.println(HANGMANPICS[state]);
     }
-   public void start(){
-printState();
 
-   }
-private void printState(){
-   int numberOfAttempts=attempts.size();
-   System.out.println(HANGMANPICS[numberOfAttempts]);
-}
+    public static void printGameLost(String word) {
+        System.out.println("");
+        System.out.println("PRZEGRAŁEŚ! Słowo to: " + word);
+        System.out.println("Czy chcesz spróbować jeszcze raz?");
+    }
 
+    public static void printGameWon() {
+        System.out.println("");
+        System.out.println("WYGRAŁEŚ! GRATULACJE!");
+    }
 
+    public static void printState(ArrayList<String> wrongAttemps, String mask){
+        Print.printGameState(wrongAttemps.size());
+        System.out.println("#### Słowo: ");
+        System.out.print(mask);
+    }
 }
