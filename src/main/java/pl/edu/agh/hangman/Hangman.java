@@ -5,8 +5,8 @@ public class Hangman {
 
 
     public static void main(String[] args) {
-
-        String word = Word.getRandomWordFromFile("src/main/resources/slowa.txt");
+    GetRandomWordFromUrl generator=new GetRandomWordFromUrl("src/main/resources/slowa.txt");
+     String word= generator.getWord();
         System.out.println(word);
 
         Gra game = new Gra("word");
